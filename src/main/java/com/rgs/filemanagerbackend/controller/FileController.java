@@ -1,6 +1,5 @@
 package com.rgs.filemanagerbackend.controller;
 
-import com.rgs.filemanagerbackend.exception.FileManagerException;
 import com.rgs.filemanagerbackend.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -18,7 +17,7 @@ import java.io.IOException;
 public class FileController {
     @Autowired
     private FileService fileService;
-    @GetMapping("{directoryKey}/files")
+    @GetMapping("{directoryKey}/list/file")
     public ResponseEntity<?> listFiles(@PathVariable(name = "directoryKey") final String directoryKey){
         return ResponseEntity.ok(fileService.listAllFilesByDirectoryKey(directoryKey));
     }
@@ -45,5 +44,9 @@ public class FileController {
         fileService.uploadFile(directoryKey, file);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
-    
+    @DeleteMapping("delete/file")
+    public ResponseEntity<?> deleteFile(@RequestParam String directoryKey, @RequestParam String fileName){
+        fileService.verifyAndDeleteFile(directoryKey, fileName);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
 }

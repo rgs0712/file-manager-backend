@@ -22,9 +22,6 @@ import java.util.stream.Stream;
 @Service
 @Slf4j
 public class FileService {
-    /*@Value("#{${file-manager.directory.list}}")
-    private Map<String,String> listDirectories;*/
-
     @Autowired
     DirectoryProperty directoryProperty;
     public DirectoryProperty listAllDirs(){
@@ -52,10 +49,25 @@ public class FileService {
         return new UrlResource(uri);
     }
     @Async
-    public void uploadFile(String directoryKey, MultipartFile file) throws IOException {
+    @SneakyThrows
+    public void uploadFile(String directoryKey, MultipartFile file){
         String directory = directoryProperty.getDirectory().get(directoryKey).getPath();
         String fileName = file.getOriginalFilename();
         byte[] bytes = file.getBytes();
         Files.write(new File(directory +"/"+ fileName).toPath(), bytes);
+    }
+    @Async
+    @SneakyThrows
+    public void deleteFile(String directoryKey, String fileName){
+        String directory = directoryProperty.getDirectory().get(directoryKey).getPath();
+        Files.delete(new File(directory +"/"+ fileName).toPath());
+    }
+    @SneakyThrows
+    public void verifyAndDeleteFile(String directoryKey, String fileName){
+        if(!directoryProperty.getDirectory().get(directoryKey).isAccess()){
+            throw new FileManagerException("No access to Delete");
+        }else{
+            deleteFile(directoryKey,fileName);
+        }
     }
 }
