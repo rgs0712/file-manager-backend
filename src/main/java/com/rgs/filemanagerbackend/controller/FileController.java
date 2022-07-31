@@ -29,7 +29,7 @@ public class FileController {
     @GetMapping("/download/file")
     public ResponseEntity<Resource> download(
             @RequestParam final String directoryKey,
-            @RequestParam final String fileName) throws IOException, FileManagerException {
+            @RequestParam final String fileName) throws IOException{
 
         HttpHeaders header = new HttpHeaders();
         header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"");

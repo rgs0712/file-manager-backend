@@ -1,11 +1,12 @@
 package com.rgs.filemanagerbackend;
 
-import io.swagger.annotations.Api;
+import com.rgs.filemanagerbackend.config.DirectoryProperty;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
-@Api
+@EnableConfigurationProperties({DirectoryProperty.class})
 public class FileManagerBackendApplication {
 
 	public static void main(String[] args) {
